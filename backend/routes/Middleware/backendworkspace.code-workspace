@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "WebD",
+			"path": "../../../.."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "WebD"
+	}
+}
