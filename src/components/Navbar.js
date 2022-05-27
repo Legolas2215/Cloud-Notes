@@ -7,13 +7,11 @@ import { Link, useLocation } from 'react-router-dom'
 function Navbar() {
 
     let location = useLocation();
-    useEffect(() => {
-        console.log(location.pathname)
-    }, [location]);
+    
 
     return (
         <div>
-            <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
+            <nav className="navbar fixed-top navbar-expand-lg bg-dark navbar-dark">
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="#">Cloud Notebook</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +36,7 @@ function Navbar() {
                     </div>
                 </div>
             </nav>
+            
         </div>
     )
 }

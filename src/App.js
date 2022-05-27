@@ -15,11 +15,10 @@ import NoteState from './context/notes/noteState';
 function App() {
   return (
     <>
-
-
       <NoteState>
         <BrowserRouter>
           <Navbar />
+          <br /><br />
           <div className="container">
             <Routes>
               <Route exact path="/" element={<Home />}> </Route>
