@@ -1,11 +1,17 @@
-import React from 'react'
+import {React,useContext} from 'react'
+import noteContext from '../context/notes/noteContext'
 
 export const Alert = () => {
+
+    const context = useContext(noteContext);
+    const {alert} = context;
     return (
-        <div>
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
-            </div>
+        <div className='container'>
+            {alert && <div class="alert alert-dark" role="alert" >
+                {alert.message}
+            </div>}
         </div>
     )
 }
+
+export default Alert;

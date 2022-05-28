@@ -1,10 +1,11 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom';
 import noteContext from '../context/notes/noteContext'
 import { NoteItem } from './NoteItem';
 
 
 export const Notes = () => {
-
+  const navigate = useNavigate();
   const context = useContext(noteContext);
   const { notes, addNote, getNotes, editNote } = context;
   const [note, setNote] = useState({ title: "", description: "", tags: "" })
@@ -12,6 +13,9 @@ export const Notes = () => {
   const ref = useRef(null);
   const refClose = useRef(null);
   useEffect(() => {
+    if(!localStorage.getItem('token')){
+      navigate('/login');
+    }
     getNotes();
   }, [])
 
@@ -41,6 +45,7 @@ export const Notes = () => {
     ref.current.click();
     seteNote({etitle: currentNote.title, edescription: currentNote.description, etag:currentNote.tags, eid:currentNote._id})
     // console.log("Data in Notes" + currentNote.tag)
+    
     
   }
   const eonChange = (e)=>{
@@ -120,7 +125,7 @@ export const Notes = () => {
         <div className="row">
           {
             notes.map((note) => {
-              return (<NoteItem notes={note} key={note._id} updateNote={updateNote} />)
+              return (<NoteItem notes={note} key={note._id} updateNote={updateNote}/>)
             })}
         </div>
       </div>

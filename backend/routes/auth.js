@@ -24,6 +24,7 @@ router.post('/createUser', [
     body('email', 'Enter correct').isEmail(),
     body('password', 'Enter atleast 5 character').isLength({ min: 5 })
 ], async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -59,12 +60,12 @@ router.post('/createUser', [
 
         var authToken = jwt.sign({ id: user.id }, JWT_Secret);
         // console.log(token);
+        success = true;
+        res.json({ success,authToken });
 
-        res.json({ authToken });
-
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Some Error occured");
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send({success,error:"Some Error occured"});
     }
 
 })
@@ -75,6 +76,7 @@ router.post('/login', [
     body('email', 'Enter correct email').isEmail(),
     body('password', 'Password cannot be empty').exists()
 ], async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -102,13 +104,13 @@ router.post('/login', [
 
         var authToken = jwt.sign(data, JWT_Secret);
         // console.log(token);
-
-        res.json({ authToken });
+        success = true;
+        res.json({ success,authToken });
 
     }
     catch (err) {
-        console.error(error.message);
-        res.status(500).send("Some Error occured");
+        console.error(err.message);
+        res.status(500).send({success,error:"Some Error occured"});
     }
 
 })
@@ -116,16 +118,16 @@ router.post('/login', [
 //Sending data to Client. Login Required
 //ROUTE:3
 router.post('/getuser', fetchUser, async (req, res) => {
-
+    let success = false;
 
     try {
         const userId = req.user.id;
         const user = await User.findById(userId).select("-password");
-        res.send(user);
+        res.send({success,user});
     }
     catch (err) {
-        console.error(error.message);
-        res.status(500).send("Some Error occured");
+        console.error(err.message);
+        res.status(500).send({success,error:"Some Error occured"});
     }
 
 

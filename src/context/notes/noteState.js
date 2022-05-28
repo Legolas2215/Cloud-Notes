@@ -6,12 +6,24 @@ import NoteContext from "./noteContext";
 import { useState } from "react";
 
 const NoteState = (props) => {
-
+  const [alert, setAlert] = useState(null);
   const local = 'http://localhost:5000'
 
   let notesInitial = [];
 
-  const [notes, setNotes] = useState(notesInitial)
+  const [notes, setNotes] = useState(notesInitial);
+
+  const showAlert = (message, type) => {
+    setAlert({
+      message: message,
+      type: type
+    })
+
+    setTimeout(() => {
+      setAlert(null)
+    }, 1500);
+
+  }
 
   const getNotes = async () => {
     const url = `${local}/api/notes/getnotes`;
@@ -20,7 +32,7 @@ const NoteState = (props) => {
       mode: 'cors', // no-cors, *cors, same-origin
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI4MzY3MzA5ZjI3ZjVlNzM2ZTRhNjA4In0sImlhdCI6MTY1Mjc4MTA1N30.Dz3nDTaSCyqQlysDbloApcs33LuRqOAi2PXEyDAp9QA'
+        'auth-token': localStorage.getItem('token')
       }
     });
     const json = await response.json(); // parses JSON response into native JavaScript objects
@@ -36,12 +48,12 @@ const NoteState = (props) => {
       mode: 'cors', // no-cors, *cors, same-origin
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI4MzY3MzA5ZjI3ZjVlNzM2ZTRhNjA4In0sImlhdCI6MTY1Mjc4MTA1N30.Dz3nDTaSCyqQlysDbloApcs33LuRqOAi2PXEyDAp9QA'
+        'auth-token': localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tags })
     });
 
-
+    showAlert("Note Added","success");
     getNotes();
   }
 
@@ -54,11 +66,11 @@ const NoteState = (props) => {
       mode: 'cors', // no-cors, *cors, same-origin
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI4MzY3MzA5ZjI3ZjVlNzM2ZTRhNjA4In0sImlhdCI6MTY1Mjc4MTA1N30.Dz3nDTaSCyqQlysDbloApcs33LuRqOAi2PXEyDAp9QA'
+        'auth-token': localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tags })
     });
-
+    showAlert("Note Updated","success");
     getNotes();
   }
 
@@ -72,11 +84,12 @@ const NoteState = (props) => {
       mode: 'cors', // no-cors, *cors, same-origin
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI4MzY3MzA5ZjI3ZjVlNzM2ZTRhNjA4In0sImlhdCI6MTY1Mjc4MTA1N30.Dz3nDTaSCyqQlysDbloApcs33LuRqOAi2PXEyDAp9QA'
+        'auth-token': localStorage.getItem('token')
       }
     });
-
+    
     getNotes();
+    showAlert("Note Deleted","success");
   }
 
 
@@ -84,7 +97,7 @@ const NoteState = (props) => {
 
 
   return (
-    <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, getNotes, editNote }}>
+    <NoteContext.Provider value={{ notes, setNotes, addNote, deleteNote, getNotes, editNote, alert,setAlert }}>
       {props.children}
     </NoteContext.Provider>
   )
